@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ✏️ 修改这里：浏览器标签页显示的标题 -->
+  <title>张明远 — 产品经理</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =============================================
+       CSS 变量 — 修改颜色请在这里改
+    ============================================= */
+    :root {
+      --bg:        #F6F3EE;
+      --bg-card:   #FFFFFF;
+      --ink:       #16140F;
+      --ink-mid:   #5A5750;
+      --ink-light: #9C9890;
+      --accent:    #B07D3A;
+      --accent-lt: #EFE3CE;
+      --rule:      #DDD8CF;
+      --radius:    6px;
+      --serif:     'DM Serif Display', 'Noto Serif SC', serif;
+      --sans:      'DM Sans', 'Noto Serif SC', sans-serif;
+      --noto:      'Noto Serif SC', serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ─────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ── LAYOUT HELPERS ─────────────────────────── */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    @media (max-width: 640px) { .container { padding: 0 20px; } }
+
+    /* ── NAV ────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(246,243,238,.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    /* ✏️ 修改这里：左上角导航栏显示的名字 */
+    .nav-name {
+      font-family: var(--noto);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: .06em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      color: var(--ink-mid);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    @media (max-width: 520px) {
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: .75rem; }
+    }
+
+    /* ── HERO ───────────────────────────────────── */
+    .hero {
+      padding-top: 140px;
+      padding-bottom: 100px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-label {
+      font-size: .75rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 20px;
+      font-family: var(--sans);
+    }
+    /* ✏️ 修改这里：主标题大名字 */
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(3.2rem, 8vw, 7rem);
+      line-height: 1.05;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    /* ✏️ 修改这里：副标题描述 */
+    .hero-sub {
+      font-family: var(--noto);
+      font-size: clamp(.95rem, 2vw, 1.15rem);
+      color: var(--ink-mid);
+      font-weight: 300;
+      line-height: 1.8;
+      max-width: 560px;
+      margin-bottom: 44px;
+    }
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 14px 32px;
+      background: var(--ink);
+      color: var(--bg);
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: var(--radius);
+      transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+    .hero-scroll-hint {
+      font-size: .78rem;
+      color: var(--ink-light);
+      letter-spacing: .06em;
+    }
+
+    /* Large decorative number background */
+    .hero-deco {
+      position: absolute;
+      right: -20px;
+      bottom: -40px;
+      font-family: var(--serif);
+      font-size: clamp(160px, 22vw, 280px);
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--rule);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ── SECTION TITLE ──────────────────────────── */
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 56px;
+      padding-top: 80px;
+    }
+    .section-eyebrow {
+      font-size: .72rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .section-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: -.02em;
+      line-height: 1.1;
+    }
+
+    /* ── PROJECTS ───────────────────────────────── */
+    #projects { padding-bottom: 80px; border-bottom: 1px solid var(--rule); }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      transition: box-shadow .25s;
+    }
+    .project-card:hover { box-shadow: 0 8px 40px rgba(0,0,0,.07); }
+
+    .project-header {
+      padding: 36px 40px 28px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0 32px;
+      align-items: start;
+    }
+    @media (max-width: 640px) {
+      .project-header { grid-template-columns: 1fr; padding: 24px 20px 20px; }
+    }
+
+    .project-index {
+      font-family: var(--serif);
+      font-size: 4.5rem;
+      line-height: 1;
+      color: var(--accent-lt);
+      font-style: italic;
+      user-select: none;
+    }
+    @media (max-width: 640px) { .project-index { font-size: 2.8rem; } }
+
+    .project-info {}
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .tag {
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--accent-lt);
+      color: var(--accent);
+    }
+    .tag.role {
+      background: var(--ink);
+      color: var(--bg);
+    }
+
+    /* ✏️ 修改这里：每个项目的标题样式 */
+    .project-name {
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      letter-spacing: -.01em;
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+    .project-desc {
+      font-family: var(--noto);
+      font-size: .95rem;
+      color: var(--ink-mid);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    /* ── VIDEO PLACEHOLDER ──────────────────────── */
+    .video-wrap {
+      margin: 0 40px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--ink);
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    @media (max-width: 640px) { .video-wrap { margin: 0 20px; } }
+
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .play-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .2s, transform .2s;
+    }
+    .video-wrap:hover .play-btn {
+      border-color: var(--accent);
+      transform: scale(1.08);
+    }
+    .play-icon {
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 11px 0 11px 22px;
+      border-color: transparent transparent transparent rgba(255,255,255,.85);
+      margin-left: 4px;
+    }
+    .video-wrap:hover .play-icon { border-color: transparent transparent transparent var(--accent); }
+    .video-label {
+      font-size: .8rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+    }
+
+    /* 真实视频 iframe 嵌入方式（取消注释后粘贴链接）:
+
+       Bilibili:
+       <iframe src="https://player.bilibili.com/player.html?bvid=BV1xx411c7mD&autoplay=0"
+               width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+
+       YouTube:
+       <iframe src="https://www.youtube.com/embed/VIDEO_ID"
+               width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+    */
+
+    /* ── PROJECT FOOTER ─────────────────────────── */
+    .project-footer {
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--rule);
+      margin-top: 28px;
+    }
+    @media (max-width: 640px) { .project-footer { padding: 18px 20px; } }
+
+    .btn-outline {
+      display: inline-block;
+      padding: 10px 24px;
+      border: 1.5px solid var(--ink);
+      border-radius: var(--radius);
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      transition: background .2s, color .2s;
+    }
+    .btn-outline:hover { background: var(--ink); color: var(--bg); }
+
+    .btn-expand {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color .2s;
+      font-family: var(--sans);
+    }
+    .btn-expand:hover { color: var(--accent); }
+    .expand-arrow {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg) translateY(-3px);
+      transition: transform .25s;
+    }
+    .btn-expand.open .expand-arrow { transform: rotate(-135deg) translateY(-3px); }
+
+    /* ── EXPAND PANEL ───────────────────────────── */
+    .project-detail {
+      display: none;
+      padding: 0 40px 36px;
+    }
+    .project-detail.open { display: block; }
+    @media (max-width: 640px) { .project-detail { padding: 0 20px 24px; } }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 700px) { .detail-grid { grid-template-columns: 1fr; } }
+
+    .detail-block h4 {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 14px;
+      font-family: var(--sans);
+    }
+    .detail-block ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .detail-block li {
+      font-size: .9rem;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      font-family: var(--noto);
+      font-weight: 300;
+      padding-left: 18px;
+      position: relative;
+    }
+    .detail-block li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: .6em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* ── ABOUT ──────────────────────────────────── */
+    #about { padding-bottom: 80px; border-bottom: 1px solid var(--rule); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    @media (max-width: 700px) { .about-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+    /* ✏️ 修改这里：关于我的正文描述 */
+    .about-text {
+      font-family: var(--noto);
+      font-size: 1rem;
+      line-height: 2;
+      color: var(--ink-mid);
+      font-weight: 300;
+    }
+    .about-text strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .skill-item {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .skill-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--accent-lt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .skill-icon svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 1.8; }
+    .skill-name {
+      font-size: .9rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+      font-family: var(--noto);
+    }
+    .skill-desc {
+      font-size: .83rem;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      font-family: var(--noto);
+      font-weight: 300;
+    }
+
+    /* ── CONTACT ────────────────────────────────── */
+    #contact { padding-bottom: 100px; }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; } }
+
+    .contact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 28px 24px;
+      text-decoration: none;
+      transition: border-color .2s, box-shadow .2s;
+      display: block;
+    }
+    .contact-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px rgba(176,125,58,.12);
+    }
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-lt);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .contact-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.8; }
+    .contact-type {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    /* ✏️ 修改这里：联系方式的显示文字 */
+    .contact-value {
+      font-size: .95rem;
+      color: var(--ink);
+      font-weight: 400;
+      font-family: var(--noto);
+    }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 28px 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-copy {
+      font-size: .78rem;
+      color: var(--ink-light);
+    }
+    .footer-back {
+      font-size: .78rem;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: .06em;
+      transition: color .2s;
+    }
+    .footer-back:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ─────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-label  { animation: fadeUp .6s ease both; }
+    .hero-name   { animation: fadeUp .6s .1s ease both; }
+    .hero-sub    { animation: fadeUp .6s .2s ease both; }
+    .hero-meta   { animation: fadeUp .6s .3s ease both; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════
+       导航栏
+  ════════════════════════════════════════════ -->
+  <nav>
+    <div class="container">
+      <div class="nav-inner">
+        <!-- ✏️ 修改这里：导航栏左侧名字 -->
+        <a href="#" class="nav-name">张明远</a>
+        <ul class="nav-links">
+          <li><a href="#projects">项目</a></li>
+          <li><a href="#about">关于</a></li>
+          <li><a href="#contact">联系</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════
+       首屏 Hero
+  ════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="container">
+      <!-- ✏️ 修改这里：顶部小标签文字 -->
+      <p class="hero-label">产品经理 · 作品集</p>
+
+      <!-- ✏️ 修改这里：你的姓名，<em> 包裹的字会变成金色斜体 -->
+      <h1 class="hero-name">张<em>明远</em></h1>
+
+      <!-- ✏️ 修改这里：一句话自我介绍，显示在名字下方 -->
+      <p class="hero-sub">
+        专注从 0 到 1 的产品构建，5 年经验横跨消费级操作系统与健康科技赛道。
+        <br>相信好的产品源于对用户真实需求的深度理解。
+      </p>
+
+      <div class="hero-meta">
+        <a href="#projects" class="btn-primary">查看我的项目</a>
+        <!-- ✏️ 修改这里：可删除或修改右侧提示文字 -->
+        <span class="hero-scroll-hint">向下滚动探索 ↓</span>
+      </div>
+    </div>
+    <div class="hero-deco" aria-hidden="true">PM</div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       项目展示
+  ════════════════════════════════════════════ -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Selected Work</span>
+        <div class="section-rule"></div>
+      </div>
+      <h2 class="section-title" style="margin-bottom: 48px;">我做过的产品</h2>
+
+      <!-- ──────────────────────────────────────────
+           项目一
+      ────────────────────────────────────────── -->
+      <article class="project-card">
+        <div class="project-header">
+          <div class="project-index" aria-hidden="true">01</div>
+          <div class="project-info">
+            <div class="project-tags">
+              <!-- ✏️ 修改这里：项目标签，可增删 -->
+              <span class="tag">操作系统</span>
+              <span class="tag">iOS</span>
+              <span class="tag">C 端</span>
+              <!-- ✏️ 修改这里：你的职责角色标签 -->
+              <span class="tag role">核心交互 PM</span>
+            </div>
+            <!-- ✏️ 修改这里：项目名称 -->
+            <h3 class="project-name">星辰 OS</h3>
+            <!-- ✏️ 修改这里：项目一句话描述 -->
+            <p class="project-desc">面向消费级市场的手机操作系统，我负责核心交互模块的产品设计，覆盖从通知中心到多任务管理的完整体验链路。</p>
+          </div>
+        </div>
+
+        <!-- 视频区域 -->
+        <div class="video-wrap" onclick="this.style.pointerEvents='none'">
+
+          <!-- ✏️ 默认显示占位符。准备好视频后，删除下方整个 .video-placeholder div，
+               取消注释 iframe 代码，并替换链接。 -->
+          <div class="video-placeholder">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="video-label">演示视频</span>
+          </div>
+
+          <!--
+          === Bilibili 嵌入（取消注释并替换 bvid）===
+          <iframe
+            src="https://player.bilibili.com/player.html?bvid=BV1xxxxxxxxx&autoplay=0&danmaku=0"
+            width="100%" height="100%" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+            allowfullscreen>
+          </iframe>
+
+          === YouTube 嵌入（取消注释并替换 VIDEO_ID）===
+          <iframe
+            src="https://www.youtube.com/embed/VIDEO_ID"
+            width="100%" height="100%" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+            allowfullscreen>
+          </iframe>
+          -->
+
+        </div>
+
+        <div class="project-footer">
+          <!-- ✏️ 修改这里：产品官网链接，href 换成真实 URL -->
+          <a href="#" class="btn-outline" target="_blank" rel="noopener">产品官网 ↗</a>
+          <button class="btn-expand" onclick="toggleDetail(this)">
+            了解更多 <span class="expand-arrow"></span>
+          </button>
+        </div>
+
+        <div class="project-detail">
+          <div class="detail-grid">
+            <div class="detail-block">
+              <h4>项目背景</h4>
+              <ul>
+                <!-- ✏️ 修改这里：项目背景，3 条左右 -->
+                <li>国内某头部手机厂商自研操作系统，用户量级超过 X 亿</li>
+                <li>市场背景：XXX（替换成真实背景）</li>
+                <li>核心挑战：XXX（替换成真实挑战）</li>
+              </ul>
+            </div>
+            <div class="detail-block">
+              <h4>我的职责</h4>
+              <ul>
+                <!-- ✏️ 修改这里：你具体负责了什么 -->
+                <li>负责通知中心、控制中心等核心交互模块的 PRD 撰写与迭代</li>
+                <li>推动跨团队协作（设计/研发/QA），主导功能从立项到上线全流程</li>
+                <li>XXX（替换成你的第三条职责）</li>
+              </ul>
+            </div>
+            <div class="detail-block">
+              <h4>项目结果</h4>
+              <ul>
+                <!-- ✏️ 修改这里：可量化的结果数据 -->
+                <li>该功能上线后用户留存率提升 XX%（替换成真实数据）</li>
+                <li>获得公司内部 XXX 奖项（如有）</li>
+                <li>XXX（替换成其他成果）</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ──────────────────────────────────────────
+           项目二
+      ────────────────────────────────────────── -->
+      <article class="project-card">
+        <div class="project-header">
+          <div class="project-index" aria-hidden="true">02</div>
+          <div class="project-info">
+            <div class="project-tags">
+              <!-- ✏️ 修改这里：项目二标签 -->
+              <span class="tag">健康科技</span>
+              <span class="tag">从 0 到 1</span>
+              <span class="tag">B2C</span>
+              <span class="tag role">独立 PM</span>
+            </div>
+            <!-- ✏️ 修改这里：项目二名称 -->
+            <h3 class="project-name">脉络健康</h3>
+            <!-- ✏️ 修改这里：项目二描述 -->
+            <p class="project-desc">面向慢病人群的健康管理 App，由我从 0 到 1 完整主导，包含产品定义、用户研究、功能设计及上线运营。</p>
+          </div>
+        </div>
+
+        <div class="video-wrap">
+          <div class="video-placeholder">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="video-label">演示视频</span>
+          </div>
+          <!--
+          === Bilibili ===
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV1xxxxxxxxx&autoplay=0&danmaku=0"
+            width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+
+          === YouTube ===
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID"
+            width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+          -->
+        </div>
+
+        <div class="project-footer">
+          <!-- ✏️ 修改这里：项目二产品链接 -->
+          <a href="#" class="btn-outline" target="_blank" rel="noopener">产品官网 ↗</a>
+          <button class="btn-expand" onclick="toggleDetail(this)">
+            了解更多 <span class="expand-arrow"></span>
+          </button>
+        </div>
+
+        <div class="project-detail">
+          <div class="detail-grid">
+            <div class="detail-block">
+              <h4>项目背景</h4>
+              <ul>
+                <!-- ✏️ 修改这里：项目二背景 -->
+                <li>XXX（替换成真实背景）</li>
+                <li>XXX</li>
+                <li>XXX</li>
+              </ul>
+            </div>
+            <div class="detail-block">
+              <h4>我的职责</h4>
+              <ul>
+                <!-- ✏️ 修改这里：项目二职责 -->
+                <li>主导用户研究，完成 XX 次深度访谈，定义核心用户画像</li>
+                <li>从 0 搭建产品功能框架，输出完整 PRD 文档</li>
+                <li>XXX</li>
+              </ul>
+            </div>
+            <div class="detail-block">
+              <h4>项目结果</h4>
+              <ul>
+                <!-- ✏️ 修改这里：项目二成果 -->
+                <li>上线 X 个月，注册用户突破 XX 万</li>
+                <li>App Store 评分 X.X，用户好评率 XX%</li>
+                <li>XXX</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ──────────────────────────────────────────
+           项目三
+      ────────────────────────────────────────── -->
+      <article class="project-card">
+        <div class="project-header">
+          <div class="project-index" aria-hidden="true">03</div>
+          <div class="project-info">
+            <div class="project-tags">
+              <!-- ✏️ 修改这里：项目三标签 -->
+              <span class="tag">企业服务</span>
+              <span class="tag">SaaS</span>
+              <span class="tag">B2B</span>
+              <span class="tag role">核心功能 PM</span>
+            </div>
+            <!-- ✏️ 修改这里：项目三名称 -->
+            <h3 class="project-name">云图协作</h3>
+            <!-- ✏️ 修改这里：项目三描述 -->
+            <p class="project-desc">面向中大型企业的在线协作工具，我负责核心功能的产品设计，包括实时文档协作与权限管理体系。</p>
+          </div>
+        </div>
+
+        <div class="video-wrap">
+          <div class="video-placeholder">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="video-label">演示视频</span>
+          </div>
+          <!--
+          === Bilibili ===
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV1xxxxxxxxx&autoplay=0&danmaku=0"
+            width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+
+          === YouTube ===
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID"
+            width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+          -->
+        </div>
+
+        <div class="project-footer">
+          <!-- ✏️ 修改这里：项目三产品链接 -->
+          <a href="#" class="btn-outline" target="_blank" rel="noopener">产品官网 ↗</a>
+          <button class="btn-expand" onclick="toggleDetail(this)">
+            了解更多 <span class="expand-arrow"></span>
+          </button>
+        </div>
+
+        <div class="project-detail">
+          <div class="detail-grid">
+            <div class="detail-block">
+              <h4>项目背景</h4>
+              <ul>
+                <!-- ✏️ 修改这里：项目三背景 -->
+                <li>XXX（替换成真实背景）</li>
+                <li>XXX</li>
+                <li>XXX</li>
+              </ul>
+            </div>
+            <div class="detail-block">
+              <h4>我的职责</h4>
+              <ul>
+                <!-- ✏️ 修改这里：项目三职责 -->
+                <li>XXX</li>
+                <li>XXX</li>
+                <li>XXX</li>
+              </ul>
+            </div>
+            <div class="detail-block">
+              <h4>项目结果</h4>
+              <ul>
+                <!-- ✏️ 修改这里：项目三成果 -->
+                <li>XXX</li>
+                <li>XXX</li>
+                <li>XXX</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       关于我
+  ════════════════════════════════════════════ -->
+  <section id="about">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">About</span>
+        <div class="section-rule"></div>
+      </div>
+      <h2 class="section-title" style="margin-bottom: 48px;">关于我</h2>
+
+      <div class="about-grid">
+        <div>
+          <!-- ✏️ 修改这里：关于我的描述段落 -->
+          <p class="about-text">
+            我是一名专注于 <strong>消费级产品与从 0 到 1 项目</strong> 的产品经理，拥有 5 年经验。
+            <br><br>
+            曾深度参与国内头部手机厂商操作系统的核心模块设计，也有独立从零主导一款 App 上线的完整经历。我相信好的产品设计来源于对用户真实场景的深度共情，而非单纯的功能堆砌。
+            <br><br>
+            <!-- ✏️ 修改这里：可以加入你的个人风格或价值观 -->
+            目前正在寻找 <strong>产品经理</strong> 方向的新机会，期待与优秀的团队一起做出更好的产品。
+          </p>
+        </div>
+
+        <div class="skills-list">
+          <!-- ── 技能 1 ── -->
+          <div class="skill-item">
+            <div class="skill-icon">
+              <!-- 用户研究图标 -->
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            </div>
+            <div>
+              <!-- ✏️ 修改这里：技能一名称和描述 -->
+              <div class="skill-name">用户研究与需求挖掘</div>
+              <div class="skill-desc">擅长深度访谈与定性分析，将用户痛点转化为可落地的产品需求。</div>
+            </div>
+          </div>
+
+          <!-- ── 技能 2 ── -->
+          <div class="skill-item">
+            <div class="skill-icon">
+              <!-- 路线图图标 -->
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="10" x2="8" y2="19"/></svg>
+            </div>
+            <div>
+              <!-- ✏️ 修改这里：技能二名称和描述 -->
+              <div class="skill-name">产品规划与项目推进</div>
+              <div class="skill-desc">熟悉从立项到上线的完整链路，能有效协调设计、研发、运营多方资源。</div>
+            </div>
+          </div>
+
+          <!-- ── 技能 3 ── -->
+          <div class="skill-item">
+            <div class="skill-icon">
+              <!-- 数据图标 -->
+              <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <!-- ✏️ 修改这里：技能三名称和描述 -->
+              <div class="skill-name">数据驱动决策</div>
+              <div class="skill-desc">善用数据分析工具，通过 A/B 实验和核心指标追踪持续优化产品体验。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       联系方式
+  ════════════════════════════════════════════ -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Contact</span>
+        <div class="section-rule"></div>
+      </div>
+      <h2 class="section-title" style="margin-bottom: 12px;">联系我</h2>
+      <!-- ✏️ 修改这里：联系区域的副标题 -->
+      <p style="font-family:var(--noto);color:var(--ink-mid);margin-bottom:44px;font-size:.95rem;font-weight:300;line-height:1.8;">
+        欢迎随时与我联系，无论是工作机会还是产品方向的交流。
+      </p>
+
+      <div class="contact-grid">
+
+        <!-- ✏️ 修改这里：邮箱地址，href 改为 mailto:你的邮箱 -->
+        <a href="mailto:your@email.com" class="contact-card">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          </div>
+          <div class="contact-type">邮箱</div>
+          <div class="contact-value">your@email.com</div>
+        </a>
+
+        <!-- ✏️ 修改这里：微信号 -->
+        <div class="contact-card" style="cursor:default;">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 11a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm6 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/><path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/></svg>
+          </div>
+          <div class="contact-type">微信</div>
+          <div class="contact-value">your_wechat_id</div>
+        </div>
+
+        <!-- ✏️ 修改这里：LinkedIn 链接，href 换成你的 LinkedIn URL -->
+        <a href="https://linkedin.com/in/yourprofile" class="contact-card" target="_blank" rel="noopener">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="4"/><line x1="8" y1="11" x2="8" y2="17"/><line x1="8" y1="7" x2="8" y2="8"/><path d="M12 11v6m0 0v-4a2 2 0 0 1 4 0v4"/></svg>
+          </div>
+          <div class="contact-type">LinkedIn</div>
+          <div class="contact-value">linkedin.com/in/yourprofile</div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       页脚
+  ════════════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <!-- ✏️ 修改这里：页脚版权文字 -->
+        <span class="footer-copy">© 2024 张明远 · 保留所有权利</span>
+        <a href="#" class="footer-back">回到顶部 ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════
+       JavaScript — 展开/收起详情
+  ════════════════════════════════════════════ -->
+  <script>
+    function toggleDetail(btn) {
+      const card   = btn.closest('.project-card');
+      const detail = card.querySelector('.project-detail');
+      const isOpen = detail.classList.contains('open');
+
+      detail.classList.toggle('open', !isOpen);
+      btn.classList.toggle('open', !isOpen);
+      btn.querySelector('span:first-of-type') &&
+        (btn.childNodes[0].textContent = isOpen ? '了解更多 ' : '收起 ');
+    }
+  </script>
+
+</body>
+</html>
