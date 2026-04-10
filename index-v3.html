@@ -211,7 +211,7 @@
       text-decoration: none;
       color: inherit;
       border-bottom: 1px solid rgba(240, 234, 224, .1);
-      padding: 18px 0;
+      padding: 20px 0;
       transition: transform var(--dur-base) var(--ease),
         border-color var(--dur-fast),
         background-color var(--dur-fast);
@@ -258,11 +258,11 @@
       font-weight: 900;
       font-size: clamp(20px, 2vw, 34px);
       letter-spacing: -.01em;
-      line-height: 1.08;
+      line-height: 1.16;
       color: rgba(240, 234, 224, .78);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
       transition: color var(--dur-fast), letter-spacing var(--dur-base) var(--ease),
         transform var(--dur-base) var(--ease), text-shadow var(--dur-fast);
     }
@@ -647,8 +647,7 @@
       }
 
       .col-preview {
-        min-height: 56vh;
-        order: -1;
+        display: none;
       }
 
       .col-side {
