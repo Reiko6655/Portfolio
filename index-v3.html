@@ -35,6 +35,8 @@
       --dur-base: .42s;
       --dur-slow: .68s;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      /* 素材预览区：仅缩小图/视频层与容器边缘的距离 */
+      --pv-media-inset: 64px;
     }
 
     html {
@@ -107,7 +109,7 @@
     header {
       position: relative;
       z-index: 1;
-      padding: 24px 44px;
+      padding: 20px 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -132,18 +134,19 @@
     .main {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
+      /* 不强制撑满一屏，避免项目区与页脚之间出现大块留白 */
+      min-height: 0;
       display: grid;
       grid-template-columns: minmax(230px, 1fr) minmax(420px, 1.4fr) minmax(230px, 1fr);
-      gap: 24px;
-      padding: 56px 32px 56px;
+      gap: 16px;
+      padding: 32px 32px 28px;
       align-items: center;
     }
 
     .top-intro {
       grid-column: 1 / -1;
-      padding: 0 6px 10px;
-      margin-bottom: 4px;
+      padding: 0 6px 6px;
+      margin-bottom: 0;
       border-bottom: 1px solid rgba(240, 234, 224, .12);
       box-shadow: inset 0 -1px 0 rgba(155, 200, 255, .08);
     }
@@ -182,7 +185,9 @@
       flex-direction: column;
       justify-content: center;
       gap: 6px;
-      min-height: calc(100vh - 200px);
+      /* 与 .col-preview 同高：约 729px → 529px（视口高度相同时） */
+      min-height: calc(100vh - 400px);
+      max-height: calc(100vh - 400px);
     }
 
     .col-side.right {
@@ -321,8 +326,8 @@
 
     .col-preview {
       position: relative;
-      min-height: calc(100vh - 200px);
-      max-height: calc(100vh - 200px);
+      min-height: calc(100vh - 400px);
+      max-height: calc(100vh - 400px);
       align-self: center;
       overflow: hidden;
       border: none;
@@ -380,7 +385,7 @@
     /* Image layers */
     .pv-layers {
       position: absolute;
-      inset: 0;
+      inset: var(--pv-media-inset);
       z-index: 0;
     }
 
@@ -447,8 +452,32 @@
       transform: scale(1);
     }
 
-    #layer-6 .pv-slot,
-    #layer-6 .pv-video {
+    /* OPPO Watch/Band：略缩小，宽度不超过常规预览的可视宽度 */
+    #layer-4 .pv-slot,
+    #layer-4 .pv-video {
+      inset: auto;
+      left: 50%;
+      top: 50%;
+      width: min(86%, 100%);
+      height: min(86%, 100%);
+      object-fit: contain;
+      transform: translate(-50%, -50%);
+    }
+
+    #layer-4 .pv-slot {
+      transform: translate(-50%, -50%) scale(1.02) translateY(6px);
+    }
+
+    #layer-4 .pv-slot.on {
+      transform: translate(-50%, -50%) scale(1) translateY(0);
+    }
+
+    #layer-4 .pv-video.on {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    #layer-5 .pv-slot,
+    #layer-5 .pv-video {
       inset: auto;
       left: 50%;
       top: 50%;
@@ -458,7 +487,7 @@
       background: transparent;
     }
 
-    #layer-6 .pv-ph {
+    #layer-5 .pv-ph {
       display: none;
     }
 
@@ -505,7 +534,7 @@
     #contact {
       position: relative;
       z-index: 1;
-      padding: 72px 44px;
+      padding: 52px 44px;
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
@@ -635,6 +664,10 @@
         grid-template-columns: 1fr;
         padding: 70px 16px 16px;
         gap: 14px;
+        /* 避免 min-height:100vh 时行被纵向拉伸，导致左右两列项目块在各自行里垂直居中，出现 04/05 之间异常大空白 */
+        min-height: 0;
+        align-content: start;
+        align-items: stretch;
       }
 
       .top-intro {
@@ -650,9 +683,16 @@
         display: none;
       }
 
+      /* 让左右列子元素直接参与 .main 的网格排版，避免「整列左块 + 整列右块」中间出现被撑开的空白 */
       .col-side {
-        min-height: auto;
-        padding: 14px 12px;
+        display: contents;
+        min-height: 0;
+        padding: 0;
+      }
+
+      .col-side>.side-kicker,
+      .col-side>.proj-row {
+        grid-column: 1 / -1;
       }
 
       .col-side.right {
@@ -729,32 +769,24 @@
     <div class="col-side left">
       <div class="side-kicker">Selected Works</div>
 
-      <a class="proj-row" data-i="0" href="https://www.youtube.com/watch?v=XpSw0s3Kr3A" target="_blank" rel="noopener">
+      <a class="proj-row" data-i="0" href="https://www.youtube.com/watch?v=TUh39r2Bjcw" target="_blank" rel="noopener">
         <span class="proj-num">01</span>
         <div class="proj-text">
-          <div class="proj-name">Nothing OS 4.0</div>
-          <div class="proj-meta">2025</div>
-        </div>
-      </a>
-
-      <a class="proj-row" data-i="1" href="https://www.youtube.com/watch?v=TUh39r2Bjcw" target="_blank" rel="noopener">
-        <span class="proj-num">02</span>
-        <div class="proj-text">
           <div class="proj-name">Nothing OS 3.0</div>
-          <div class="proj-meta">2024</div>
+          <div class="proj-meta">2024 — 2025</div>
         </div>
       </a>
 
-      <a class="proj-row" data-i="2" href="https://youtu.be/QiFMkIeWUEA?t=908s" target="_blank" rel="noopener">
-        <span class="proj-num">03</span>
+      <a class="proj-row" data-i="1" href="https://youtu.be/QiFMkIeWUEA?t=908s" target="_blank" rel="noopener">
+        <span class="proj-num">02</span>
         <div class="proj-text">
           <div class="proj-name">Nothing OS 2.5</div>
           <div class="proj-meta">2024</div>
         </div>
       </a>
 
-      <a class="proj-row" data-i="3" href="https://youtu.be/w1h5ukOqOKs?t=103" target="_blank" rel="noopener">
-        <span class="proj-num">04</span>
+      <a class="proj-row" data-i="2" href="https://youtu.be/w1h5ukOqOKs?t=103" target="_blank" rel="noopener">
+        <span class="proj-num">03</span>
         <div class="proj-text">
           <div class="proj-name">Nothing OS 2.0</div>
           <div class="proj-meta">2023</div>
@@ -774,60 +806,52 @@
       <!-- Image layers (one per project, stacked) -->
       <div class="pv-layers">
 
-        <!-- Layer 0 — Nothing OS 4.0 -->
+        <!-- Layer 0 — Nothing OS 3.0 -->
         <div class="pv-layer" id="layer-0">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #14120D 0%, #251F12 100%)"></div>
+          <div class="pv-ph" style="background: linear-gradient(160deg, #0E1812 0%, #152219 100%)"></div>
           <img class="pv-slot" id="l0-a" src="" alt="">
           <img class="pv-slot" id="l0-b" src="" alt="">
           <video class="pv-video" id="v0" muted loop playsinline preload="metadata"></video>
         </div>
 
-        <!-- Layer 1 — Nothing OS 3.0 -->
+        <!-- Layer 1 — Nothing OS 2.5 -->
         <div class="pv-layer" id="layer-1">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #0E1812 0%, #152219 100%)"></div>
+          <div class="pv-ph" style="background: linear-gradient(160deg, #160F18 0%, #1F1226 100%)"></div>
           <img class="pv-slot" id="l1-a" src="" alt="">
           <img class="pv-slot" id="l1-b" src="" alt="">
           <video class="pv-video" id="v1" muted loop playsinline preload="metadata"></video>
         </div>
 
-        <!-- Layer 2 — Nothing OS 2.5 -->
+        <!-- Layer 2 — Nothing OS 2.0 -->
         <div class="pv-layer" id="layer-2">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #160F18 0%, #1F1226 100%)"></div>
+          <div class="pv-ph" style="background: linear-gradient(160deg, #151310 0%, #1f1a13 100%)"></div>
           <img class="pv-slot" id="l2-a" src="" alt="">
           <img class="pv-slot" id="l2-b" src="" alt="">
           <video class="pv-video" id="v2" muted loop playsinline preload="metadata"></video>
         </div>
 
-        <!-- Layer 3 — Nothing OS 2.0 -->
+        <!-- Layer 3 — Nothing OS 1.5 -->
         <div class="pv-layer" id="layer-3">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #151310 0%, #1f1a13 100%)"></div>
+          <div class="pv-ph" style="background: linear-gradient(160deg, #11100f 0%, #1a1715 100%)"></div>
           <img class="pv-slot" id="l3-a" src="" alt="">
           <img class="pv-slot" id="l3-b" src="" alt="">
           <video class="pv-video" id="v3" muted loop playsinline preload="metadata"></video>
         </div>
 
-        <!-- Layer 4 — Nothing OS 1.5 -->
+        <!-- Layer 4 — OPPO Watch/Band -->
         <div class="pv-layer" id="layer-4">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #11100f 0%, #1a1715 100%)"></div>
+          <div class="pv-ph" style="background: linear-gradient(160deg, #0E1812 0%, #152219 100%)"></div>
           <img class="pv-slot" id="l4-a" src="" alt="">
           <img class="pv-slot" id="l4-b" src="" alt="">
           <video class="pv-video" id="v4" muted loop playsinline preload="metadata"></video>
         </div>
 
-        <!-- Layer 5 — OPPO Watch/Band -->
+        <!-- Layer 5 — Heath App -->
         <div class="pv-layer" id="layer-5">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #0E1812 0%, #152219 100%)"></div>
+          <div class="pv-ph" style="background: linear-gradient(160deg, #160F18 0%, #1F1226 100%)"></div>
           <img class="pv-slot" id="l5-a" src="" alt="">
           <img class="pv-slot" id="l5-b" src="" alt="">
           <video class="pv-video" id="v5" muted loop playsinline preload="metadata"></video>
-        </div>
-
-        <!-- Layer 6 — Heath App -->
-        <div class="pv-layer" id="layer-6">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #160F18 0%, #1F1226 100%)"></div>
-          <img class="pv-slot" id="l6-a" src="" alt="">
-          <img class="pv-slot" id="l6-b" src="" alt="">
-          <video class="pv-video" id="v6" muted loop playsinline preload="metadata"></video>
         </div>
 
       </div><!-- /pv-layers -->
@@ -841,26 +865,26 @@
     </div>
 
     <div class="col-side right">
-      <a class="proj-row" data-i="4" href="https://www.youtube.com/watch?v=OmGw_xFSj2s" target="_blank" rel="noopener">
-        <span class="proj-num">05</span>
+      <a class="proj-row" data-i="3" href="https://www.youtube.com/watch?v=OmGw_xFSj2s" target="_blank" rel="noopener">
+        <span class="proj-num">04</span>
         <div class="proj-text">
           <div class="proj-name">Nothing OS 1.5</div>
           <div class="proj-meta">2022 — 2023</div>
         </div>
       </a>
 
-      <a class="proj-row" data-i="5" href="https://www.oppo.com/in/wearables" target="_blank" rel="noopener">
-        <span class="proj-num">06</span>
+      <a class="proj-row" data-i="4" href="https://www.oppo.com/in/wearables" target="_blank" rel="noopener">
+        <span class="proj-num">05</span>
         <div class="proj-text">
           <div class="proj-name">OPPO Watch/Band</div>
           <div class="proj-meta">2020 — 2021</div>
         </div>
       </a>
 
-      <a class="proj-row" data-i="6"
+      <a class="proj-row" data-i="5"
         href="https://play.google.com/store/apps/details?id=com.heytap.health.international&hl=en" target="_blank"
         rel="noopener">
-        <span class="proj-num">07</span>
+        <span class="proj-num">06</span>
         <div class="proj-text">
           <div class="proj-name">Heath App</div>
           <div class="proj-meta">2020 — 2021</div>
@@ -908,16 +932,6 @@
        路径：相对路径如 'images/n1.jpg'，或完整 URL
        ───────────────────────────────────────────────── */
     const PROJECTS = [
-      {
-        name: 'Nothing OS 4.0',
-        preview: {
-          type: 'images',
-          interval: 2500,           // 轮转间隔 ms
-          srcs: [
-            'Portfolio_assets/project_preview/NothingOS4.0.png',
-          ]
-        }
-      },
       {
         name: 'Nothing OS 3.0',
         preview: {
@@ -998,8 +1012,46 @@
     let activeIdx = -1;
     let hoverInTimer = null;
     let hoverOutTimer = null;
+    let autoProjectTimer = null;
+    const AUTO_PROJECT_MS = 3000;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const mqDesktopPreview = window.matchMedia('(min-width: 821px)');
+
+    function isManualControl() {
+      if (previewCol && previewCol.matches(':hover')) return true;
+      return rows.some(r => r === document.activeElement || r.matches(':hover'));
+    }
+
+    function stopAutoProjectTimer() {
+      if (autoProjectTimer) {
+        clearInterval(autoProjectTimer);
+        autoProjectTimer = null;
+      }
+    }
+
+    function startAutoProjectTimer() {
+      stopAutoProjectTimer();
+      if (prefersReducedMotion || !mqDesktopPreview.matches) return;
+      autoProjectTimer = setInterval(() => {
+        if (isManualControl()) return;
+        const n = PROJECTS.length;
+        const next = activeIdx < 0 ? 0 : (activeIdx + 1) % n;
+        activate(next);
+      }, AUTO_PROJECT_MS);
+    }
+
+    function scheduleIdleResume() {
+      clearTimeout(hoverOutTimer);
+      hoverOutTimer = setTimeout(() => {
+        if (isManualControl()) return;
+        if (prefersReducedMotion || !mqDesktopPreview.matches) return;
+        const n = PROJECTS.length;
+        const start = activeIdx >= 0 ? (activeIdx + 1) % n : 0;
+        activate(start);
+        startAutoProjectTimer();
+      }, prefersReducedMotion ? 0 : 220);
+    }
 
     function stopCycle(i) {
       clearInterval(layers[i].timer);
@@ -1080,29 +1132,10 @@
       rows[i]?.classList.add('is-active');
     }
 
-    function deactivate(immediate = false) {
-      clearTimeout(hoverInTimer);
-      clearTimeout(hoverOutTimer);
-      const run = () => {
-        if (activeIdx >= 0) {
-          rows[activeIdx]?.classList.remove('is-active');
-          layers[activeIdx].layer.classList.remove('on');
-          stopCycle(activeIdx);
-        }
-        activeIdx = -1;
-        colRight.classList.remove('active');
-      };
-
-      if (immediate || prefersReducedMotion) {
-        run();
-      } else {
-        hoverOutTimer = setTimeout(run, 160);
-      }
-    }
-
     function scheduleActivate(i) {
       clearTimeout(hoverInTimer);
       clearTimeout(hoverOutTimer);
+      stopAutoProjectTimer();
       if (prefersReducedMotion) {
         activate(i);
       } else {
@@ -1131,15 +1164,46 @@
 
     rows.forEach((row, i) => {
       row.addEventListener('mouseenter', () => scheduleActivate(i));
-      row.addEventListener('mouseleave', () => deactivate());
-      row.addEventListener('focus', () => activate(i));
-      row.addEventListener('blur', () => deactivate());
+      row.addEventListener('mouseleave', () => scheduleIdleResume());
+      row.addEventListener('focus', () => {
+        clearTimeout(hoverInTimer);
+        clearTimeout(hoverOutTimer);
+        stopAutoProjectTimer();
+        activate(i);
+      });
+      row.addEventListener('blur', () => scheduleIdleResume());
     });
 
     if (previewCol) {
-      previewCol.addEventListener('mouseenter', () => clearTimeout(hoverOutTimer));
-      previewCol.addEventListener('mouseleave', () => deactivate());
+      previewCol.addEventListener('mouseenter', () => {
+        clearTimeout(hoverOutTimer);
+        stopAutoProjectTimer();
+      });
+      previewCol.addEventListener('mouseleave', () => scheduleIdleResume());
     }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopAutoProjectTimer();
+      } else if (!prefersReducedMotion && mqDesktopPreview.matches && !isManualControl()) {
+        startAutoProjectTimer();
+      }
+    });
+
+    mqDesktopPreview.addEventListener('change', e => {
+      if (!e.matches) stopAutoProjectTimer();
+      else if (!isManualControl()) {
+        if (activeIdx < 0) activate(0);
+        startAutoProjectTimer();
+      }
+    });
+
+    setTimeout(() => {
+      if (prefersReducedMotion || !mqDesktopPreview.matches) return;
+      if (isManualControl()) return;
+      activate(0);
+      startAutoProjectTimer();
+    }, 600);
 
     /* ── Custom cursor ── */
     const cur = document.getElementById('cur');
