@@ -37,6 +37,10 @@
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
       /* 素材预览区：仅缩小图/视频层与容器边缘的距离 */
       --pv-media-inset: 64px;
+      /* 宽屏：页面左右留白与三列间距（避免侧栏无限变宽、中间与标题离得过远） */
+      --page-gutter-x: clamp(32px, 5vw + 24px, 128px);
+      --main-col-gap: clamp(16px, 1.6vw, 36px);
+      --side-col-max: min(360px, 34vw);
       --font-sans: 'Space Grotesk', system-ui, sans-serif;
       --font-serif-cn: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
       --font-intro-name: 'OPPO Sans 4.0', var(--font-serif-cn);
@@ -120,7 +124,7 @@
     header {
       position: relative;
       z-index: 1;
-      padding: 20px 44px;
+      padding: 20px var(--page-gutter-x);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -148,9 +152,11 @@
       /* 不强制撑满一屏，避免项目区与页脚之间出现大块留白 */
       min-height: 0;
       display: grid;
-      grid-template-columns: minmax(230px, 1fr) minmax(420px, 1.4fr) minmax(230px, 1fr);
-      gap: 16px;
-      padding: 32px 32px 28px;
+      /* 侧栏有上限，中间列吃掉加宽视口的增量，避免「标题贴边、与预览之间却极空」 */
+      grid-template-columns:
+        minmax(230px, var(--side-col-max)) minmax(420px, 1fr) minmax(230px, var(--side-col-max));
+      gap: var(--main-col-gap);
+      padding: 32px var(--page-gutter-x) 28px;
       align-items: center;
     }
 
@@ -242,12 +248,10 @@
     .proj-row:hover {
       transform: translateX(6px);
       border-color: rgba(240, 180, 41, .45);
-      background: linear-gradient(to right, rgba(240, 180, 41, .08), transparent 70%);
     }
 
     .col-side.right .proj-row:hover {
       transform: translateX(-6px);
-      background: linear-gradient(to left, rgba(240, 180, 41, .08), transparent 70%);
     }
 
     .proj-row:focus-visible {
@@ -297,11 +301,6 @@
 
     .proj-row.is-active {
       border-color: rgba(240, 180, 41, .58);
-      background: linear-gradient(to right, rgba(240, 180, 41, .12), transparent 72%);
-    }
-
-    .col-side.right .proj-row.is-active {
-      background: linear-gradient(to left, rgba(240, 180, 41, .12), transparent 72%);
     }
 
     .proj-row.is-active .proj-name {
@@ -310,7 +309,7 @@
     }
 
     .proj-row.is-active .proj-num {
-      color: var(--accent-2);
+      color: var(--accent);
       transform: translateY(-1px);
     }
 
@@ -546,7 +545,7 @@
     #contact {
       position: relative;
       z-index: 1;
-      padding: 52px 44px;
+      padding: 52px var(--page-gutter-x);
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
@@ -636,7 +635,7 @@
     footer {
       position: relative;
       z-index: 1;
-      padding: 20px 44px;
+      padding: 20px var(--page-gutter-x);
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
