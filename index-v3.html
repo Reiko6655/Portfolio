@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,700;1,900&family=DM+Mono:wght@300;400;500&family=Noto+Serif+SC:wght@300;400;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Noto+Sans+SC:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <style>
     *,
@@ -37,6 +37,17 @@
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
       /* 素材预览区：仅缩小图/视频层与容器边缘的距离 */
       --pv-media-inset: 64px;
+      --font-sans: 'Space Grotesk', system-ui, sans-serif;
+      --font-serif-cn: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-intro-name: 'OPPO Sans 4.0', var(--font-serif-cn);
+    }
+
+    @font-face {
+      font-family: 'OPPO Sans 4.0';
+      src: url('Portfolio_assets/fonts/OPPO-Sans-4.0-intro.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
     }
 
     html {
@@ -49,7 +60,7 @@
         radial-gradient(circle at 50% 52%, rgba(240, 180, 41, .1) 0%, transparent 62%),
         linear-gradient(170deg, var(--bg-soft) 0%, var(--bg) 48%, #090705 100%);
       color: var(--text);
-      font-family: 'Noto Serif SC', serif;
+      font-family: var(--font-serif-cn);
       overflow-x: hidden;
       min-height: 100vh;
       position: relative;
@@ -161,18 +172,19 @@
     }
 
     .intro-name {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-weight: 900;
-      font-size: clamp(34px, 4vw, 58px);
-      letter-spacing: -.02em;
-      line-height: .92;
+      font-family: var(--font-intro-name);
+      font-style: normal;
+      font-weight: 400;
+      font-size: clamp(34px, 4vw, 56px);
+      letter-spacing: .04em;
+      line-height: 1.05;
       color: var(--text);
       margin-bottom: 12px;
+      font-feature-settings: 'kern' 1;
     }
 
     .intro-desc {
-      font-family: 'Noto Serif SC', serif;
+      font-family: var(--font-serif-cn);
       font-size: 13px;
       line-height: 1.8;
       color: var(--dim2);
@@ -258,11 +270,11 @@
     }
 
     .proj-name {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-weight: 900;
+      font-family: var(--font-sans);
+      font-style: normal;
+      font-weight: 400;
       font-size: clamp(20px, 2vw, 34px);
-      letter-spacing: -.01em;
+      letter-spacing: -.02em;
       line-height: 1.16;
       color: rgba(240, 234, 224, .78);
       white-space: normal;
@@ -349,9 +361,9 @@
     }
 
     .pv-default-bg {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-weight: 900;
+      font-family: var(--font-sans);
+      font-style: normal;
+      font-weight: 400;
       font-size: clamp(72px, 9vw, 140px);
       display: none;
       color: rgba(240, 234, 224, .08);
@@ -564,12 +576,12 @@
     }
 
     .ct-h {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-weight: 900;
-      font-size: clamp(30px, 3.2vw, 52px);
+      font-family: var(--font-sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: clamp(30px, 3.2vw, 50px);
       color: var(--text);
-      letter-spacing: -.02em;
+      letter-spacing: -.03em;
     }
 
     .ct-links {
