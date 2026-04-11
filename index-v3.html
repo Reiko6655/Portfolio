@@ -37,10 +37,19 @@
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
       /* 素材预览区：仅缩小图/视频层与容器边缘的距离 */
       --pv-media-inset: 64px;
+      /* 预览区：宽度随视口略变；宽屏用 --pv-w-max / --pv-h-max 限制最大尺寸 */
+      --pv-w-max: 400px;
+      --pv-h-max: 680px;
+      --pv-w: clamp(340px, 28vw, var(--pv-w-max));
+      --pv-h: min(calc(var(--pv-w) * 17 / 9), var(--pv-h-max));
+      /* 左侧 kicker 占位：与 .col-side padding 协调，右侧同高留白使 01/04 等行对齐 */
+      --works-kicker-offset: 48px;
       /* 宽屏：页面左右留白与三列间距（避免侧栏无限变宽、中间与标题离得过远） */
-      --page-gutter-x: clamp(32px, 5vw + 24px, 128px);
+      /* 宽屏加大左右边距，压缩中间区宽度，避免标题与预览之间留白过大 */
+      --page-gutter-x: clamp(32px, 6vw + 28px, 168px);
       --main-col-gap: clamp(16px, 1.6vw, 36px);
-      --side-col-max: min(360px, 34vw);
+      /* 项目标题列与预览之间的水平间距（略大于模块内其它 gap，视觉更稳） */
+      --works-preview-gap: clamp(32px, 4vw, 48px);
       --font-sans: 'Space Grotesk', system-ui, sans-serif;
       --font-serif-cn: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
       --font-intro-name: 'OPPO Sans 4.0', var(--font-serif-cn);
@@ -152,11 +161,23 @@
       /* 不强制撑满一屏，避免项目区与页脚之间出现大块留白 */
       min-height: 0;
       display: grid;
-      /* 侧栏有上限，中间列吃掉加宽视口的增量，避免「标题贴边、与预览之间却极空」 */
-      grid-template-columns:
-        minmax(230px, var(--side-col-max)) minmax(420px, 1fr) minmax(230px, var(--side-col-max));
-      gap: var(--main-col-gap);
+      grid-template-columns: 1fr;
+      row-gap: var(--main-col-gap);
       padding: 32px var(--page-gutter-x) 28px;
+      align-items: start;
+    }
+
+    /* 模块二：与 .main 同宽，标题列外沿与 .top-intro 等模块内容边对齐 */
+    .works-band {
+      width: 100%;
+    }
+
+    .works-inner {
+      display: grid;
+      width: 100%;
+      grid-template-columns: 1fr var(--pv-w) 1fr;
+      column-gap: var(--works-preview-gap);
+      row-gap: 0;
       align-items: center;
     }
 
@@ -198,36 +219,55 @@
     }
 
     .col-side {
+      position: relative;
       padding: 24px 18px;
+      padding-top: var(--works-kicker-offset);
       display: flex;
       flex-direction: column;
       justify-content: center;
       gap: 6px;
-      /* 与 .col-preview 同高：约 729px → 529px（视口高度相同时） */
-      min-height: calc(100vh - 400px);
-      max-height: calc(100vh - 400px);
+      /* 与 .col-preview 同高（高度仅随预览宽度 / 比例变化） */
+      min-height: var(--pv-h);
+      max-height: var(--pv-h);
+    }
+
+    .col-side.left {
+      justify-self: start;
+      width: max-content;
+      padding-left: 6px;
+      padding-right: 18px;
     }
 
     .col-side.right {
+      justify-self: end;
+      width: max-content;
       align-items: flex-end;
+      padding-left: 18px;
+      padding-right: 6px;
     }
 
     .side-kicker {
+      position: absolute;
+      top: 24px;
+      left: 6px;
       font-family: 'DM Mono', monospace;
       font-size: 10px;
       letter-spacing: .2em;
       text-transform: uppercase;
       color: var(--dim);
-      margin-bottom: 18px;
+      margin-bottom: 0;
+      pointer-events: none;
     }
 
     .col-side.right .side-kicker {
       text-align: right;
+      left: auto;
+      right: 6px;
     }
 
     .proj-row {
       display: grid;
-      grid-template-columns: 30px 1fr;
+      grid-template-columns: 30px minmax(min-content, max-content);
       gap: 10px;
       width: 100%;
       cursor: none;
@@ -241,7 +281,8 @@
     }
 
     .col-side.right .proj-row {
-      grid-template-columns: 1fr 30px;
+      grid-template-columns: minmax(min-content, max-content) 30px;
+      justify-content: end;
       text-align: right;
     }
 
@@ -277,11 +318,11 @@
       font-family: var(--font-sans);
       font-style: normal;
       font-weight: 400;
-      font-size: clamp(20px, 2vw, 34px);
+      font-size: clamp(18px, 2vw, 34px);
       letter-spacing: -.02em;
       line-height: 1.16;
       color: rgba(240, 234, 224, .78);
-      white-space: normal;
+      white-space: nowrap;
       overflow: visible;
       text-overflow: clip;
       transition: color var(--dur-fast), letter-spacing var(--dur-base) var(--ease),
@@ -337,8 +378,9 @@
 
     .col-preview {
       position: relative;
-      min-height: calc(100vh - 400px);
-      max-height: calc(100vh - 400px);
+      width: var(--pv-w);
+      height: var(--pv-h);
+      flex-shrink: 0;
       align-self: center;
       overflow: hidden;
       border: none;
@@ -674,11 +716,16 @@
       .main {
         grid-template-columns: 1fr;
         padding: 70px 16px 16px;
-        gap: 14px;
+        row-gap: 14px;
         /* 避免 min-height:100vh 时行被纵向拉伸，导致左右两列项目块在各自行里垂直居中，出现 04/05 之间异常大空白 */
         min-height: 0;
         align-content: start;
         align-items: stretch;
+      }
+
+      .works-band,
+      .works-inner {
+        display: contents;
       }
 
       .top-intro {
@@ -699,6 +746,12 @@
         display: contents;
         min-height: 0;
         padding: 0;
+      }
+
+      .col-side .side-kicker {
+        position: static;
+        pointer-events: auto;
+        margin-bottom: 12px;
       }
 
       .col-side>.side-kicker,
@@ -777,130 +830,136 @@
       </p>
     </section>
 
-    <div class="col-side left">
-      <div class="side-kicker">Selected Works</div>
+    <div class="works-band">
+      <div class="works-inner">
+        <div class="col-side left">
+          <div class="side-kicker">Selected Works</div>
 
-      <a class="proj-row" data-i="0" href="https://www.youtube.com/watch?v=TUh39r2Bjcw" target="_blank" rel="noopener">
-        <span class="proj-num">01</span>
-        <div class="proj-text">
-          <div class="proj-name">Nothing OS 3.0</div>
-          <div class="proj-meta">2024 — 2025</div>
+          <a class="proj-row" data-i="0" href="https://www.youtube.com/watch?v=TUh39r2Bjcw" target="_blank"
+            rel="noopener">
+            <span class="proj-num">01</span>
+            <div class="proj-text">
+              <div class="proj-name">Nothing OS 3.0</div>
+              <div class="proj-meta">2024 — 2025</div>
+            </div>
+          </a>
+
+          <a class="proj-row" data-i="1" href="https://youtu.be/QiFMkIeWUEA?t=908s" target="_blank" rel="noopener">
+            <span class="proj-num">02</span>
+            <div class="proj-text">
+              <div class="proj-name">Nothing OS 2.5</div>
+              <div class="proj-meta">2024</div>
+            </div>
+          </a>
+
+          <a class="proj-row" data-i="2" href="https://youtu.be/w1h5ukOqOKs?t=103" target="_blank" rel="noopener">
+            <span class="proj-num">03</span>
+            <div class="proj-text">
+              <div class="proj-name">Nothing OS 2.0</div>
+              <div class="proj-meta">2023</div>
+            </div>
+          </a>
         </div>
-      </a>
 
-      <a class="proj-row" data-i="1" href="https://youtu.be/QiFMkIeWUEA?t=908s" target="_blank" rel="noopener">
-        <span class="proj-num">02</span>
-        <div class="proj-text">
-          <div class="proj-name">Nothing OS 2.5</div>
-          <div class="proj-meta">2024</div>
+        <div class="col-preview" id="col-right">
+
+          <!-- Default (no project hovered) -->
+          <div class="pv-default" id="pv-default">
+            <!-- ✏️ 修改这里：右侧大字水印 -->
+            <div class="pv-default-bg">黄<br>敏<br>玲</div>
+            <div class="pv-default-hint">Click project to view details</div>
+          </div>
+
+          <!-- Image layers (one per project, stacked) -->
+          <div class="pv-layers">
+
+            <!-- Layer 0 — Nothing OS 3.0 -->
+            <div class="pv-layer" id="layer-0">
+              <div class="pv-ph" style="background: linear-gradient(160deg, #0E1812 0%, #152219 100%)"></div>
+              <img class="pv-slot" id="l0-a" src="" alt="">
+              <img class="pv-slot" id="l0-b" src="" alt="">
+              <video class="pv-video" id="v0" muted loop playsinline preload="metadata"></video>
+            </div>
+
+            <!-- Layer 1 — Nothing OS 2.5 -->
+            <div class="pv-layer" id="layer-1">
+              <div class="pv-ph" style="background: linear-gradient(160deg, #160F18 0%, #1F1226 100%)"></div>
+              <img class="pv-slot" id="l1-a" src="" alt="">
+              <img class="pv-slot" id="l1-b" src="" alt="">
+              <video class="pv-video" id="v1" muted loop playsinline preload="metadata"></video>
+            </div>
+
+            <!-- Layer 2 — Nothing OS 2.0 -->
+            <div class="pv-layer" id="layer-2">
+              <div class="pv-ph" style="background: linear-gradient(160deg, #151310 0%, #1f1a13 100%)"></div>
+              <img class="pv-slot" id="l2-a" src="" alt="">
+              <img class="pv-slot" id="l2-b" src="" alt="">
+              <video class="pv-video" id="v2" muted loop playsinline preload="metadata"></video>
+            </div>
+
+            <!-- Layer 3 — Nothing OS 1.5 -->
+            <div class="pv-layer" id="layer-3">
+              <div class="pv-ph" style="background: linear-gradient(160deg, #11100f 0%, #1a1715 100%)"></div>
+              <img class="pv-slot" id="l3-a" src="" alt="">
+              <img class="pv-slot" id="l3-b" src="" alt="">
+              <video class="pv-video" id="v3" muted loop playsinline preload="metadata"></video>
+            </div>
+
+            <!-- Layer 4 — OPPO Watch/Band -->
+            <div class="pv-layer" id="layer-4">
+              <div class="pv-ph" style="background: linear-gradient(160deg, #0E1812 0%, #152219 100%)"></div>
+              <img class="pv-slot" id="l4-a" src="" alt="">
+              <img class="pv-slot" id="l4-b" src="" alt="">
+              <video class="pv-video" id="v4" muted loop playsinline preload="metadata"></video>
+            </div>
+
+            <!-- Layer 5 — Heath App -->
+            <div class="pv-layer" id="layer-5">
+              <div class="pv-ph" style="background: linear-gradient(160deg, #160F18 0%, #1F1226 100%)"></div>
+              <img class="pv-slot" id="l5-a" src="" alt="">
+              <img class="pv-slot" id="l5-b" src="" alt="">
+              <video class="pv-video" id="v5" muted loop playsinline preload="metadata"></video>
+            </div>
+
+          </div><!-- /pv-layers -->
+
+          <!-- Bottom label (project name + counter) -->
+          <div class="pv-label">
+            <span class="pvl-name" id="pvl-name"></span>
+            <span class="pvl-counter" id="pvl-counter"></span>
+          </div>
+
         </div>
-      </a>
 
-      <a class="proj-row" data-i="2" href="https://youtu.be/w1h5ukOqOKs?t=103" target="_blank" rel="noopener">
-        <span class="proj-num">03</span>
-        <div class="proj-text">
-          <div class="proj-name">Nothing OS 2.0</div>
-          <div class="proj-meta">2023</div>
+        <div class="col-side right">
+          <a class="proj-row" data-i="3" href="https://www.youtube.com/watch?v=OmGw_xFSj2s" target="_blank"
+            rel="noopener">
+            <span class="proj-num">04</span>
+            <div class="proj-text">
+              <div class="proj-name">Nothing OS 1.5</div>
+              <div class="proj-meta">2022 — 2023</div>
+            </div>
+          </a>
+
+          <a class="proj-row" data-i="4" href="https://www.oppo.com/in/wearables" target="_blank" rel="noopener">
+            <span class="proj-num">05</span>
+            <div class="proj-text">
+              <div class="proj-name">OPPO Watch/Band</div>
+              <div class="proj-meta">2020 — 2021</div>
+            </div>
+          </a>
+
+          <a class="proj-row" data-i="5"
+            href="https://play.google.com/store/apps/details?id=com.heytap.health.international&hl=en" target="_blank"
+            rel="noopener">
+            <span class="proj-num">06</span>
+            <div class="proj-text">
+              <div class="proj-name">Heath App</div>
+              <div class="proj-meta">2020 — 2021</div>
+            </div>
+          </a>
         </div>
-      </a>
-    </div>
-
-    <div class="col-preview" id="col-right">
-
-      <!-- Default (no project hovered) -->
-      <div class="pv-default" id="pv-default">
-        <!-- ✏️ 修改这里：右侧大字水印 -->
-        <div class="pv-default-bg">黄<br>敏<br>玲</div>
-        <div class="pv-default-hint">Click project to view details</div>
       </div>
-
-      <!-- Image layers (one per project, stacked) -->
-      <div class="pv-layers">
-
-        <!-- Layer 0 — Nothing OS 3.0 -->
-        <div class="pv-layer" id="layer-0">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #0E1812 0%, #152219 100%)"></div>
-          <img class="pv-slot" id="l0-a" src="" alt="">
-          <img class="pv-slot" id="l0-b" src="" alt="">
-          <video class="pv-video" id="v0" muted loop playsinline preload="metadata"></video>
-        </div>
-
-        <!-- Layer 1 — Nothing OS 2.5 -->
-        <div class="pv-layer" id="layer-1">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #160F18 0%, #1F1226 100%)"></div>
-          <img class="pv-slot" id="l1-a" src="" alt="">
-          <img class="pv-slot" id="l1-b" src="" alt="">
-          <video class="pv-video" id="v1" muted loop playsinline preload="metadata"></video>
-        </div>
-
-        <!-- Layer 2 — Nothing OS 2.0 -->
-        <div class="pv-layer" id="layer-2">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #151310 0%, #1f1a13 100%)"></div>
-          <img class="pv-slot" id="l2-a" src="" alt="">
-          <img class="pv-slot" id="l2-b" src="" alt="">
-          <video class="pv-video" id="v2" muted loop playsinline preload="metadata"></video>
-        </div>
-
-        <!-- Layer 3 — Nothing OS 1.5 -->
-        <div class="pv-layer" id="layer-3">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #11100f 0%, #1a1715 100%)"></div>
-          <img class="pv-slot" id="l3-a" src="" alt="">
-          <img class="pv-slot" id="l3-b" src="" alt="">
-          <video class="pv-video" id="v3" muted loop playsinline preload="metadata"></video>
-        </div>
-
-        <!-- Layer 4 — OPPO Watch/Band -->
-        <div class="pv-layer" id="layer-4">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #0E1812 0%, #152219 100%)"></div>
-          <img class="pv-slot" id="l4-a" src="" alt="">
-          <img class="pv-slot" id="l4-b" src="" alt="">
-          <video class="pv-video" id="v4" muted loop playsinline preload="metadata"></video>
-        </div>
-
-        <!-- Layer 5 — Heath App -->
-        <div class="pv-layer" id="layer-5">
-          <div class="pv-ph" style="background: linear-gradient(160deg, #160F18 0%, #1F1226 100%)"></div>
-          <img class="pv-slot" id="l5-a" src="" alt="">
-          <img class="pv-slot" id="l5-b" src="" alt="">
-          <video class="pv-video" id="v5" muted loop playsinline preload="metadata"></video>
-        </div>
-
-      </div><!-- /pv-layers -->
-
-      <!-- Bottom label (project name + counter) -->
-      <div class="pv-label">
-        <span class="pvl-name" id="pvl-name"></span>
-        <span class="pvl-counter" id="pvl-counter"></span>
-      </div>
-
-    </div>
-
-    <div class="col-side right">
-      <a class="proj-row" data-i="3" href="https://www.youtube.com/watch?v=OmGw_xFSj2s" target="_blank" rel="noopener">
-        <span class="proj-num">04</span>
-        <div class="proj-text">
-          <div class="proj-name">Nothing OS 1.5</div>
-          <div class="proj-meta">2022 — 2023</div>
-        </div>
-      </a>
-
-      <a class="proj-row" data-i="4" href="https://www.oppo.com/in/wearables" target="_blank" rel="noopener">
-        <span class="proj-num">05</span>
-        <div class="proj-text">
-          <div class="proj-name">OPPO Watch/Band</div>
-          <div class="proj-meta">2020 — 2021</div>
-        </div>
-      </a>
-
-      <a class="proj-row" data-i="5"
-        href="https://play.google.com/store/apps/details?id=com.heytap.health.international&hl=en" target="_blank"
-        rel="noopener">
-        <span class="proj-num">06</span>
-        <div class="proj-text">
-          <div class="proj-name">Heath App</div>
-          <div class="proj-meta">2020 — 2021</div>
-        </div>
-      </a>
     </div>
 
   </main>
